@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class TimerViewModel: ObservableObject {
     @Published var isDisplaySetTimeView: Bool
@@ -13,19 +14,22 @@ class TimerViewModel: ObservableObject {
     @Published var timer: Timer?
     @Published var timeRemaining: Int
     @Published var isPaused: Bool
+    var notificationService: NotificationService
     
     init(
         isDisplaySetTimeView: Bool = true,
         time: Time = .init(hours: 0, minutes: 0, seconds: 0),
         timer: Timer? = nil,
         timeRemaining: Int = 0,
-        isPaused: Bool = false
+        isPaused: Bool = false,
+        notificationService: NotificationService = .init()
     ) {
         self.isDisplaySetTimeView = isDisplaySetTimeView
         self.time = time
         self.timer = timer
         self.timeRemaining = timeRemaining
         self.isPaused = isPaused
+        self.notificationService = notificationService
     }
 }
 
@@ -57,6 +61,14 @@ private extension TimerViewModel {
     func startTimer() {
         guard timer == nil else { return }
         
+        var backgroundTaskID: UIBackgroundTaskIdentifier?//벡그라운드 작업ID를 저장할 변수를 선언한 것이며 초기값은 nil일 것이다.
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask() {//앱이 백그라운드로 전환됐을 때 일부 작업을 계속 수행할 수 있게 해주는 메서드
+            if let task = backgroundTaskID {
+                UIApplication.shared.endBackgroundTask(task)
+                backgroundTaskID = .invalid
+            }
+        }
+        
         timer = Timer.scheduledTimer(
             withTimeInterval: 1,
             repeats: true
@@ -65,7 +77,12 @@ private extension TimerViewModel {
                 self.timeRemaining -= 1
             } else {
                 self.stopTimer()
-                //다음 시간에 추가 구현
+                self.notificationService.sendNotification()//이것만 하면 백그라운드에서는 동작하지 않는다.
+                
+                if let task = backgroundTaskID {
+                    UIApplication.shared.endBackgroundTask(task)
+                    backgroundTaskID = .invalid
+                }
             }
         }
     }
