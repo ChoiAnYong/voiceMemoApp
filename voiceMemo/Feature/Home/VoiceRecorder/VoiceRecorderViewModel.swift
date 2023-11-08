@@ -27,22 +27,21 @@ class VoiceRecorderViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate 
     @Published var isDisplayAlert: Bool
     @Published var alertMessage: String
     
-    //음성 메모 녹음 관련 프로퍼티
+    // 음성메모 녹음 관련 프로퍼티
     var audioRecorder: AVAudioRecorder?
     @Published var isRecording: Bool
     
-    
-    //음성 메모 재생 관련 프로퍼티
+    // 음성메모 재생 관련 프로퍼티
     var audioPlayer: AVAudioPlayer?
     @Published var isPlaying: Bool
     @Published var isPaused: Bool
     @Published var playedTime: TimeInterval
     private var progressTimer: Timer?
     
-    //음성 메모된 파일
+     // 음성메모된 파일
     var recordedFiles: [URL]
     
-    //현재 선택된 음성메모 파일
+    // 현재 선택된 음성메모 파일
     @Published var selectedRecoredFile: URL?
     
     init(
@@ -78,6 +77,7 @@ extension VoiceRecorderViewModel {
     
     func removeBtnTapped() {
         setIsDisplayRemoveVoiceRecorderAlert(true)
+        
     }
     
     func removeSelectedVoiceRecord() {
@@ -95,7 +95,6 @@ extension VoiceRecorderViewModel {
             displayAlert(message: "선택된 음성메모 파일을 성공적으로 삭제했습니다.")
         } catch {
             displayAlert(message: "선택된 음성메모 파일 삭제 중 오류가 발생했습니다.")
-
         }
     }
     
@@ -117,7 +116,7 @@ extension VoiceRecorderViewModel {
     }
 }
 
-//MARK: - 음성메모 녹음 관련
+// MARK: - 음성메모 녹음 관련
 extension VoiceRecorderViewModel {
     func recordBtnTapped() {
         selectedRecoredFile = nil
@@ -162,8 +161,7 @@ extension VoiceRecorderViewModel {
     }
 }
 
-
-//MARK: - 음성메모 재생 관련
+// MARK: - 음성메모 재생 관련
 extension VoiceRecorderViewModel {
     func startPlaying(recordingURL: URL) {
         do {
