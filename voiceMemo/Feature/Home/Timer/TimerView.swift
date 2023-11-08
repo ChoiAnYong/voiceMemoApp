@@ -72,12 +72,12 @@ private struct TimePickerView: View {
     }
     
     fileprivate var body: some View {
-        VStack {
+        VStack() {
             Rectangle()
                 .fill(Color.customGray2)
                 .frame(height: 1)
             
-            HStack {
+            HStack() {
                 Picker("Hour", selection: $timerViewModel.time.hours) {
                     ForEach(0..<24) { hour in
                         Text("\(hour)시")
@@ -103,6 +103,7 @@ private struct TimePickerView: View {
                 .fill(Color.CustomGray2)
                 .frame(height: 1)
         }
+        
     }
 }
 
