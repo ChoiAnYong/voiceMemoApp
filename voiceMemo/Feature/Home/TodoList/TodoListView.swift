@@ -42,10 +42,6 @@ struct TodoListView: View {
                         .padding(.top, 20)
                 }
             }
-            
-            WriteTodoBtnView()
-                .padding(.trailing, 20)
-                .padding(.bottom, 50)
         }
         .alert(
             "To do list \(todoListViewModel.removeTodosCount)개 삭제하시겠습니까?",
